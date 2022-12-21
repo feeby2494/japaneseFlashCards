@@ -1,9 +1,9 @@
 from crypt import methods
-from api.api import app, db
+from api import app, db
 from flask import request, Response
 import json
 from .models import Mail_In_Repair, Mail_In_Web
-from api.api.site_user.models import SiteUser
+from api.site_user.models import SiteUser
 import datetime
 from sqlalchemy import exc
 

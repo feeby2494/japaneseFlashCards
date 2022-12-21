@@ -8,13 +8,15 @@ const RepairModal = (props) => {
   const [show, setShow] = useState(false);
   const [completed, setCompleted] = useState(props.deviceCompleted)
   const handleCompleted = (event) => {
-    setCompleted(!(completed));
+    
+      setCompleted(!(completed));
+      props.setRepairComplete();
+      handleClose();
+
   };
   const handleClose = () => {
     setShow(false);
-    if(completed !== props.deviceCompleted) {
-      props.getRepairsAll();
-    }
+    
   };
   const handleShow = (event) => {
     setShow(true);
@@ -23,13 +25,17 @@ const RepairModal = (props) => {
 
   
 
-   useEffect(() => {
-      if(completed !== props.deviceCompleted) {
-        props.setRepairComplete()
+  //  useEffect(() => {
+  //     if(completed !== props.deviceCompleted) {
+  //       // async function f() {
+  //       //   props.setRepairComplete();
+  //       // }
         
-        
-      }
-    }, [props.deviceCompleted, props.getRepairsAll, completed]);
+  //       props.setRepairComplete();
+
+  //       // f().then(props.getRepairsAll());
+  //     }
+  //   }, [props.deviceCompleted, props.getRepairsAll, completed]);
   
 
 

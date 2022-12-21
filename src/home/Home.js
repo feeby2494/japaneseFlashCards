@@ -50,6 +50,7 @@ export default class Home extends Component {
         this.submitWebProject = this.submitWebProject.bind(this);
         this.submitRepair = this.submitRepair.bind(this);
         this.getUserInfo = this.getUserInfo.bind(this);
+        this.addClassNameEmbedResponsiveItemToIframes = this.addClassNameEmbedResponsiveItemToIframes.bind(this);
         
         // ComponentWillMount: 
         fetch('http://127.0.0.1:5000/api/home', { method: 'get', mode: 'no-cors', })
@@ -89,6 +90,17 @@ export default class Home extends Component {
         })
     }
 
+    addClassNameEmbedResponsiveItemToIframes() {
+        
+
+        if(document.getElementsByTagName("iframe") && this.state.e110CorollaVideos){
+            var array = [...document.getElementsByTagName("iframe")]
+            array.map((el) => {
+                el.classList.add("embed-responsive-item")
+            })
+        }
+    }
+
     getVideosFromBackend(playlistId, localStateVar) {
         const ytHeaders = {
             'Accept': 'application/json',
@@ -103,12 +115,13 @@ export default class Home extends Component {
             .then( res => res.json())
             .then((data) => {
                 let varName = `${localStateVar}`;
-                console.log(data)
                 this.setState({
                     [`${varName}`] : data,
                     message: ''
                 })
-                console.log(this.state[localStateVar])
+            })
+            .then(() => {
+                this.addClassNameEmbedResponsiveItemToIframes();
             })
         }
         
@@ -224,9 +237,14 @@ export default class Home extends Component {
         // .then(this.getVideos('PLq3f8HX2eMEOKTcBfY37BfTixHiLi9K1e', 'e110CorollaVideos'))
         // .then(this.getVideos('PLq3f8HX2eMEPx3TTxOyJCCwlLRDPL-zTv', 'e170CorollaVideos'))
         // .then(this.getVideos('PLq3f8HX2eMEMzZWjfwIS07nAQMLzrzcpJ', 'fg1CorollaVideos'))
-        
     }
+
+    componentDidUpdate(){
+        this.addClassNameEmbedResponsiveItemToIframes();
+    }
+
     render(){
+        
         return(
             <Container>
                 <Row>
@@ -306,7 +324,7 @@ export default class Home extends Component {
 // Helper Components
 const RenderPlaylist = (props) => {
     
-  
+    
     return (
         
                 (props.videos)
@@ -321,7 +339,11 @@ const RenderPlaylist = (props) => {
                                 <Col lg={6}>
                                     <h2>{video.snippet.title}</h2>
                                     <div className=''>
-                                        {parse(video.player.embedHtml)}
+                                        <div class="embed-responsive embed-responsive-16by9">
+                                            {parse(video.player.embedHtml)}
+                                        </div>
+
+                                        
                                     </div>
                                 </Col>
                             )

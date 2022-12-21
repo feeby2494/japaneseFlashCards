@@ -175,14 +175,14 @@ class UserHome extends Component {
           method: 'PATCH',
           headers: headers,
     })
-    // .then(res=>res.json())
-    // .then((response) => {
-    //   this.setState({
-    //     repairsAll: Object.keys(response).map((key, index) => {return response[key]}),
-    //     repairsCompleted: Object.keys(response).map((key, index) => {return response[key]}).filter(obj => obj.repair_completed == true),
-    //     repairsInProgress: Object.keys(response).map((key, index) => {return response[key]}).filter(obj => obj.repair_completed == false)
-    //   });
-    // })
+    .then(res=>res.json())
+    .then((response) => {
+      this.setState({
+        repairsAll: Object.keys(response).map((key, index) => {return response[key]}),
+        repairsCompleted: Object.keys(response).map((key, index) => {return response[key]}).filter(obj => obj.repair_completed == true),
+        repairsInProgress: Object.keys(response).map((key, index) => {return response[key]}).filter(obj => obj.repair_completed == false)
+      });
+    })
     .catch(err => {
         console.log(err)
         this.setState({
