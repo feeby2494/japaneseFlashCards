@@ -21,7 +21,12 @@ class Login extends Component {
         };
     }
 
-    handleInputChange =(e)=>{
+  handleInputChange = (e) => {
+        // clear past error if present
+        if (this.state.errorMessage) {
+          this.clearError();
+        }
+        
         const {value,name}= e.target;
         this.setState({
             [name]:value,
@@ -41,7 +46,22 @@ class Login extends Component {
     //   return WithRouterAndRef
     // }
 
+    handleError(message) {
+        // has side effect of setting error message
+      console.log(`Error: ${message}`);
+      this.setState({
+        errorMessage: `Error: ${message}`,
+        errorBool: true
+      });
+    }
 
+  clearError() {
+      // has side effect of clearing error message
+      this.setState({
+        errorMessage: null,
+        errorBool: false
+      });
+    }
 
     onSubmit =(e)=>{
         e.preventDefault();
@@ -53,16 +73,18 @@ class Login extends Component {
             body: JSON.stringify(this.state),
             headers: headers,
         })
-        .then(res => {
+          .then(res => {
+            // Catch 401
+            if (res.status === 401) {
+              this.handleError("Username or Password are Wrong!");
+            }
+
             return res.json();
         })
         .then(data => {
-          // Ahhh, Stupid Javascript. I said wait for user to be set in localStorage, what dumb ass
-
           localStorage.setItem('token', data.token);
           localStorage.setItem('public_id', jwt_decode(data.token).public_id);
           sessionStorage["test1"] = "Lorem ipsum";
- // I really hate Javascript, this shit deosn't make any sense
           let nextUrl = '/' + jwt_decode(data.token).public_id;
           console.log(nextUrl)
           console.log(this.props)
